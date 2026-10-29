@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grant Clevert L. Llagas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#home">Grant Clevert L. Llagas</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#ugc">UGC Videos</a>
+      <a href="#about">About</a>
+      <a href="#socials">Socials</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="hero" id="home">
+  <div class="wrap">
+    <h1>Grant Clevert L. Llagas</h1>
+    <div class="role">UGC creator &amp; content maker</div>
+    <p>Real, scroll-stopping videos that make people want to try what you sell.</p>
+    <a class="btn" href="#ugc">See my UGC videos</a>
+    <a class="btn ghost" href="#contact">Work with me</a>
+  </div>
+</div>
+
+<section id="ugc">
+  <div class="wrap">
+    <div class="head">
+      <h2>UGC videos</h2>
+      <p>A selection of videos I've made for brands and products.</p>
+    </div>
+    <div class="videos" id="videoGrid"></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div class="head" style="margin:0">
+      <h2>About me</h2>
+    </div>
+    <div>
+      <p>I'm Grant Clevert L. Llagas, a content creator who makes UGC videos for brands. I film in a natural, relatable style so your product feels like a recommendation from a friend.</p>
+      <p>Replace this text with your own story, experience and the kinds of brands you want to work with.</p>
+      <ul class="facts">
+        <li><span>What I make</span>UGC videos, product reviews, short-form ads</li>
+        <li><span>Platforms</span>TikTok, Instagram Reels, YouTube Shorts</li>
+        <li><span>Based in</span>Philippines</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="socials">
+  <div class="wrap">
+    <div class="head">
+      <h2>Find me online</h2>
+      <p>Follow my content on these pages.</p>
+    </div>
+    <div class="socials" id="socialGrid"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="head">
+      <h2>Let's work together</h2>
+      <p>For collaborations, paid UGC and brand inquiries, send me an email.</p>
+    </div>
+    <a class="mail" id="mailLink" href="#"></a>
+  </div>
+</section>
+</main>
+
+<dialog id="player" aria-label="Video player">
+  <button class="close" id="closePlayer" aria-label="Close video">×</button>
+  <div class="frame" id="frame"></div>
+</dialog>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Grant Clevert L. Llagas. All rights reserved.</span>
+    <span>Content that feels real.</span>
+  </div>
+</footer>
+
+<script>
+/* ============ EDIT THIS SECTION ============ */
+
+// Your email address
+var EMAIL = "youremail@example.com";
+
+// Your social media pages: replace each url with your real link
+var SOCIALS = [
+  { name: "TikTok",    handle: "@yourhandle", url: "https://www.tiktok.com/@yourhandle" },
+  { name: "Instagram", handle: "@yourhandle", url: "https://www.instagram.com/yourhandle" },
+  { name: "YouTube",   handle: "@yourhandle", url: "https://www.youtube.com/@yourhandle" },
+  { name: "Facebook",  handle: "Grant Clevert Llagas", url: "https://www.facebook.com/yourpage" }
+];
+
+// Your UGC videos: add or remove items.
+// url   = link to the video on TikTok, Instagram, YouTube, Drive, etc.
+// thumb = optional. Leave "" and the cover loads automatically from YouTube, TikTok,
+//         Google Drive and direct .mp4 links. For Instagram, paste an image link here.
+var VIDEOS = [
+  { title: "Face Reaction Video", brand: "Cathoven AI • 2026", url: "https://www.instagram.com/reels/DdBx3hfTlbI/", thumb: "" },
+  { title: "Unboxing and first impressions", brand: "Brand name • 2026", url: "https://www.instagram.com/reel/yourvideo/", thumb: "" },
+  { title: "Day in my life with the product", brand: "Brand name • 2026", url: "https://www.youtube.com/shorts/yourvideo", thumb: "" },
+  { title: "Before and after demo", brand: "Brand name • 2025", url: "https://www.tiktok.com/@yourhandle/video/2", thumb: "" }
+];
+
+/* ============ END EDIT SECTION ============ */
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+function ytId(u){var m=u.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/);return m?m[1]:null}
+function driveId(u){var m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);return m?m[1]:null}
+function isFile(u){return /\.(mp4|webm|mov)(\?|$)/i.test(u)}
+
+// Works out a cover image from the link itself
+function quickThumb(v){
+  if(v.thumb) return v.thumb;
+  var id = ytId(v.url);
+  if(id) return "https://img.youtube.com/vi/"+id+"/hqdefault.jpg";
+  id = driveId(v.url);
+  if(id) return "https://drive.google.com/thumbnail?id="+id+"&sz=w600";
+  return "";
+}
+
+document.getElementById("videoGrid").innerHTML = VIDEOS.map(function(v,i){
+  var media = "";
+  if(isFile(v.url) && !v.thumb){
+    media = '<video src="'+esc(v.url)+'#t=0.5" muted playsinline preload="metadata"></video>';
+  } else {
+    var t = quickThumb(v);
+    if(t) media = '<img src="'+esc(t)+'" alt="" referrerpolicy="no-referrer" onerror="this.remove()">';
+  }
+  return '<a class="vid" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+
+    '<div class="thumb" id="thumb'+i+'">'+media+'<div class="play"></div></div>'+
+    '<div class="meta"><h3>'+esc(v.title)+'</h3><span>'+esc(v.brand)+'</span></div></a>';
+}).join("");
+
+// TikTok links: ask TikTok for the cover image
+VIDEOS.forEach(function(v,i){
+  if(v.thumb || !/tiktok\.com/.test(v.url)) return;
+  fetch("https://www.tiktok.com/oembed?url="+encodeURIComponent(v.url))
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(!d.thumbnail_url) return;
+      var box = document.getElementById("thumb"+i), img = document.createElement("img");
+      img.referrerPolicy = "no-referrer"; img.alt = ""; img.src = d.thumbnail_url;
+      box.insertBefore(img, box.firstChild);
+    })
+    .catch(function(){});
+});
+
+
+// ---------- Built-in player ----------
+// Turns a video link into something that can play inside the page.
+// Returns null when the link can't be embedded (then it opens in a new tab).
+function playerFor(u){
+  var m, id;
+  if(isFile(u)) return {html:'<video src="'+esc(u)+'" controls autoplay playsinline></video>'};
+  if((id = ytId(u))){
+    return {wide: !/shorts\//.test(u),
+      html:'<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>'};
+  }
+  if((m = u.match(/tiktok\.com\/.*?video\/(\d+)/)))
+    return {html:'<iframe src="https://www.tiktok.com/embed/v2/'+m[1]+'" allow="autoplay; fullscreen" allowfullscreen></iframe>'};
+  if((m = u.match(/instagram\.com\/(reel|reels|p|tv)\/([\w-]+)/)))
+    return {html:'<iframe src="https://www.instagram.com/'+(m[1]==="reels"?"reel":m[1])+'/'+m[2]+'/embed" allowfullscreen></iframe>'};
+  if((id = driveId(u)))
+    return {html:'<iframe src="https://drive.google.com/file/d/'+id+'/preview" allow="autoplay" allowfullscreen></iframe>'};
+  return null;
+}
+
+var dlg = document.getElementById("player"), frame = document.getElementById("frame");
+function closePlayer(){ if(dlg.open) dlg.close(); }
+dlg.addEventListener("close", function(){ frame.innerHTML = ""; });          // stops playback
+dlg.addEventListener("click", function(e){ if(e.target === dlg) closePlayer(); }); // click outside
+document.getElementById("closePlayer").addEventListener("click", closePlayer);
+
+document.getElementById("videoGrid").addEventListener("click", function(e){
+  var card = e.target.closest("a.vid");
+  if(!card || e.ctrlKey || e.metaKey || e.shiftKey) return;   // Ctrl/Cmd-click still opens the original link
+  var p = playerFor(card.getAttribute("href"));
+  if(!p) return;                                              // not embeddable: normal link behavior
+  e.preventDefault();
+  frame.className = "frame" + (p.wide ? " wide" : "");
+  frame.innerHTML = p.html;
+  dlg.showModal();
+});
+
+document.getElementById("socialGrid").innerHTML = SOCIALS.map(function(s){
+  return '<a class="soc" href="'+esc(s.url)+'" target="_blank" rel="noopener">'+
+    '<div><strong>'+esc(s.name)+'</strong><br><small>'+esc(s.handle)+'</small></div><span aria-hidden="true">↗</span></a>';
+}).join("");
+
+var m = document.getElementById("mailLink");
+m.textContent = EMAIL; m.href = "mailto:" + EMAIL;
+</script>
+</body>
+</html>
